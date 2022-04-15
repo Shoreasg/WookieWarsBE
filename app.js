@@ -1,4 +1,5 @@
 const express = require('express');
+const loginController = require('./controllers/loginController')
 const cors = require('cors');
 require('dotenv').config();
 const passport = require('passport')
@@ -7,7 +8,6 @@ const User = require('./models/user')
 const app = express();
 app.use(express.json())
 app.use(cors({ origin: process.env.FRONTEND_URL, methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE', 'PATCH'], credentials: true }));
-const userController = require('./controllers/login')
 app.enable('trust proxy')
 
 app.use(session({
@@ -15,7 +15,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     proxy : true ,
-    cookie: {sameSite: "none", secure: true}
+    // cookie: {sameSite: "none", secure: true}
 }));
 
 
@@ -29,7 +29,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-app.use(userController)
+app.use(loginController)
 
 
 

@@ -1,15 +1,14 @@
 const passport = require('passport')
-require("dotenv").config();
+const LocalStrategy = require('passport-local').Strategy
 const express = require('express')
 const User = require('../models/user')
 const router = express.Router()
-const LocalStrategy = require('passport-local').Strategy
+router.use(express.static("public"))
 
 
 passport.use(new LocalStrategy(User.authenticate())); // use static authenticate method of model in LocalStrategy
 
 router.post('/signup', async (req, res, next) => {
-    console.log(req.body.username)
     const findUser = await User.findOne({ username: req.body.username })//when user click signup, this will find the user by the username that they input
     if (!findUser) {//if no user found in DB, register the user.
         await User.register(new User({ username: req.body.username }), req.body.password, (err) => {
@@ -30,7 +29,7 @@ router.post('/signup', async (req, res, next) => {
 })
 
 router.post('/login', async (req, res, next) => { // this is to login the user
-    await passport.authenticate('local', (err, user, info) => { // check if the user details and password are in our DB
+    await passport.authenticate('local', (err, user) => { // check if the user details and password are in our DB
         if (err) { // if error, then send an error
             res.status(400)
             return res.send({ message: err })
@@ -41,6 +40,7 @@ router.post('/login', async (req, res, next) => { // this is to login the user
         }
         req.logIn(user, (err) => { // else, means user found, we log the user in and tell user that he login successfully
             if (err) { return next(err) }
+            next()
             return res.send({ message: "User login Successful" })
         })
     })(req, res, next)
