@@ -40,7 +40,6 @@ router.post('/login', async (req, res, next) => { // this is to login the user
         }
         req.logIn(user, (err) => { // else, means user found, we log the user in and tell user that he login successfully
             if (err) { return next(err) }
-            next()
             return res.send({ message: "User login Successful" })
         })
     })(req, res, next)
