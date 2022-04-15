@@ -68,9 +68,6 @@ router.delete('/logout', (req, res) => { //this will log the user out. Clear the
     else {
         res.send({ message: "You are not logged in!" })
     }
-
-
-
 })
 
 module.exports = router
