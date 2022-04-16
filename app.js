@@ -15,7 +15,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     proxy : true ,
-    // cookie: {sameSite: "none", secure: true}
+    cookie: {sameSite: "none", secure: true}
 }));
 
 
